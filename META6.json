@@ -1,0 +1,66 @@
+{
+  "name": "Snapshot::Auto::20170418T2207434900310200",
+  "source-url": "urn:no-install",
+  "support": {
+    "source": null
+  },
+  "emulates": {
+    
+  },
+  "perl": "6.c",
+  "resources": [
+    
+  ],
+  "build-depends": [
+    
+  ],
+  "auth": "private:snapshot",
+  "excludes": {
+    
+  },
+  "superseded-by": {
+    
+  },
+  "depends": [
+    "File::Temp",
+    "JSON::Unmarshal",
+    "File::Find",
+    "App::ModuleSnap",
+    "LibraryCheck",
+    "META6",
+    "Bailador",
+    "JSON::Marshal",
+    "JSON::Name",
+    "p6doc",
+    "zef",
+    "Shell::Command",
+    "Readline",
+    "URI",
+    "JSON::Fast",
+    "Slang::Tuxic",
+    "JSON::Class",
+    "Text::CSV",
+    "zef",
+    "File::Which",
+    "File::Directory::Tree"
+  ],
+  "tags": [
+    
+  ],
+  "license": null,
+  "test-depends": [
+    
+  ],
+  "provides": {
+    
+  },
+  "version": "0.0.1",
+  "supersedes": {
+    
+  },
+  "authors": [
+    
+  ],
+  "description": null,
+  "meta6": "0"
+}
