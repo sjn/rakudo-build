@@ -16,15 +16,15 @@ clone:
 	GIT_DIR=${SRCDIR}/zef/.git git rev-parse --git-dir || git clone ${ZEF}; \
 	GIT_DIR=${SRCDIR}/rakudo/.git git rev-parse --git-dir || git clone ${RAKUDO};
 
-rakudo-checkout:
+rakudo-pull:
 	cd ${SRCDIR}/rakudo; \
 	git checkout master; \
 	git pull; \
-	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
 	sleep 3;
 
-rakudo: rakudo-checkout
+rakudo: rakudo-pull
 	cd ${SRCDIR}/rakudo; \
+	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
 	perl Configure.pl --gen-moar --gen-nqp --backends=moar; \
 	make clean; \
 	make ; \
@@ -39,13 +39,13 @@ unsnap:
 	cd ${SNAPDIR}; \
 	zef install .
 
-zef-checkout:
+zef-pull:
 	cd ${SRCDIR}/zef; \
 	git checkout master; \
 	git pull; \
-	git checkout --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
 	sleep 3;
 
-zef: zef-checkout
+zef: zef-pull
 	cd ${SRCDIR}/zef; \
+	git checkout --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
 	${SRCDIR}/rakudo/install/bin/perl6 -I. bin/zef install .
