@@ -1,8 +1,10 @@
 SRCDIR=${HOME}/src
 SNAPDIR=${SRCDIR}/rakudo-update
 
-RAKUDO=git@github.com:rakudo/rakudo.git
-ZEF=git@github.com:ugexe/zef.git
+#RAKUDO=git@github.com:rakudo/rakudo.git
+RAKUDO=https://github.com/rakudo/rakudo.git
+#ZEF=git@github.com:ugexe/zef.git
+ZEF=https://github.com/ugexe/zef.git
 
 PATH:=${PATH}:${SRCDIR}/rakudo/install/bin/perl6
 
@@ -35,5 +37,7 @@ unsnap:
 
 zef:
 	cd ${SRCDIR}/zef; \
+	git checkout master; \
 	git pull; \
+	git checkout --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
 	${SRCDIR}/rakudo/install/bin/perl6 -I. bin/zef install .
