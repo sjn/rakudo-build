@@ -21,6 +21,7 @@ rakudo:
 	git checkout master; \
 	git pull; \
 	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
+	sleep 3; \
 	perl Configure.pl --gen-moar --gen-nqp --backends=moar; \
 	make clean; \
 	make ; \
@@ -40,4 +41,5 @@ zef:
 	git checkout master; \
 	git pull; \
 	git checkout --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
+	sleep 3; \
 	${SRCDIR}/rakudo/install/bin/perl6 -I. bin/zef install .
