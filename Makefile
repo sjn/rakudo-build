@@ -19,7 +19,7 @@ clone:
 rakudo-pull:
 	cd ${SRCDIR}/rakudo; \
 	git checkout master; \
-	git pull; \
+	git pull --ff-only; \
 	sleep 3;
 
 rakudo: rakudo-pull
@@ -42,7 +42,7 @@ unsnap:
 zef-pull:
 	cd ${SRCDIR}/zef; \
 	git checkout master; \
-	git pull; \
+	git pull --ff-only; \
 	sleep 3;
 
 zef: zef-pull
