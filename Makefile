@@ -1,12 +1,13 @@
 SRCDIR  := ${HOME}/src
 SNAPDIR := ${SRCDIR}/rakudo-update
+TARGET  := ${HOME}/rakudo
 
 #RAKUDO=git@github.com:rakudo/rakudo.git
 RAKUDO  := https://github.com/rakudo/rakudo.git
 #ZEF=git@github.com:ugexe/zef.git
 ZEF     := https://github.com/ugexe/zef.git
 
-PATH    := ${PATH}:${SRCDIR}/rakudo/install/bin/perl6
+PATH    := ${PATH}:${TARGET}/bin:${SRCDIR}/rakudo/install/bin/rakudo
 
 all: clone rakudo zef
 
@@ -18,14 +19,13 @@ clone:
 
 rakudo-pull:
 	cd ${SRCDIR}/rakudo; \
-	git checkout master; \
-	git pull --ff-only; \
+	git pull --ff-only origin master; \
 	sleep 3;
 
 rakudo: rakudo-pull
 	cd ${SRCDIR}/rakudo; \
 	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
-	perl Configure.pl --gen-moar --gen-nqp --backends=moar; \
+	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET}; \
 	make clean; \
 	make ; \
 	make test; \
@@ -33,7 +33,7 @@ rakudo: rakudo-pull
 
 snap:
 	zef install App::ModuleSnap
-	p6-module-snapshot --directory=${SNAPDIR}/.snap
+	raku-module-snapshot --directory=${SNAPDIR}/.snap
 
 unsnap:
 	cd ${SNAPDIR}; \
@@ -41,11 +41,10 @@ unsnap:
 
 zef-pull:
 	cd ${SRCDIR}/zef; \
-	git checkout master; \
-	git pull --ff-only; \
+	git pull --ff-only origin master; \
 	sleep 3;
 
 zef: zef-pull
 	cd ${SRCDIR}/zef; \
 	git checkout --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
-	${SRCDIR}/rakudo/install/bin/perl6 -I. bin/zef install .
+	${TARGET}/bin/raku -I. bin/zef install --force-install .
