@@ -25,8 +25,8 @@ rakudo-pull:
 rakudo: rakudo-pull
 	cd ${SRCDIR}/rakudo; \
 	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
-	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET}; \
 	make clean; \
+	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET}; \
 	make ; \
 	make test; \
 	make install
