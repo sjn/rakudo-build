@@ -1,6 +1,7 @@
 SRCDIR  := ${HOME}/src
 SNAPDIR := ${SRCDIR}/rakudo-update
-TARGET  := ${HOME}/rakudo
+#TARGET  := ${HOME}/rakudo
+TARGET  := /opt/rakudo
 
 #RAKUDO=git@github.com:rakudo/rakudo.git
 RAKUDO  := https://github.com/rakudo/rakudo.git
@@ -19,7 +20,7 @@ clone:
 
 rakudo-pull:
 	cd ${SRCDIR}/rakudo; \
-	git pull --ff-only origin master; \
+	git pull --tags --ff-only origin master; \
 	sleep 3;
 
 rakudo: rakudo-pull
@@ -41,7 +42,7 @@ unsnap:
 
 zef-pull:
 	cd ${SRCDIR}/zef; \
-	git pull --ff-only origin master; \
+	git pull --tags --ff-only origin master; \
 	sleep 3;
 
 zef: zef-pull
