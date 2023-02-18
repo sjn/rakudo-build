@@ -18,15 +18,21 @@ clone:
 	GIT_DIR=${SRCDIR}/zef/.git git rev-parse --git-dir || git clone ${ZEF}; \
 	GIT_DIR=${SRCDIR}/rakudo/.git git rev-parse --git-dir || git clone ${RAKUDO};
 
-rakudo-pull:
+rakudo-fetch:
 	cd ${SRCDIR}/rakudo; \
-	git pull --tags --ff-only origin master; \
+	git fetch --prune --tags --recurse-submodules; \
 	sleep 3;
 
-rakudo: rakudo-pull
+rakudo-target:
+	sudo mkdir -p ${TARGET}; \
+	sudo chown -R ${USER}: ${TARGET};
+
+rakudo: rakudo-fetch rakudo-target
 	cd ${SRCDIR}/rakudo; \
 	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
-	make clean; \
+	make distclean; \
+	rm -rf ./nqp ./install; \
+	rm -rf ${TARGET}/nqp ${TARGET}/install; \
 	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET}; \
 	make ; \
 	make test; \
@@ -34,18 +40,20 @@ rakudo: rakudo-pull
 
 snap:
 	zef install App::ModuleSnap
+
+snap-create: snap
 	raku-module-snapshot --directory=${SNAPDIR}/.snap
 
-unsnap:
-	cd ${SNAPDIR}; \
+snap-reinstall: snap-create
+	cd ${SNAPDIR}/.snap/latest; \
 	zef install .
 
-zef-pull:
+zef-fetch:
 	cd ${SRCDIR}/zef; \
-	git pull --tags --ff-only origin master; \
+	git fetch --prune --tags --recurse-submodules; \
 	sleep 3;
 
-zef: zef-pull
+zef: zef-fetch
 	cd ${SRCDIR}/zef; \
 	git checkout --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
 	${TARGET}/bin/raku -I. bin/zef install --force-install .
