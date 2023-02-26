@@ -36,7 +36,7 @@ rakudo: rakudo-fetch rakudo-prepare-target-dir
 	git switch --force main; \
 	git merge --ff-only --progress --stat origin/main main; \
 	sleep 3; \
-	git switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=-1 --tags); \
+	git switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
 	make distclean; \
 	rm -rf ./nqp ./install; \
 	rm -rf ${TARGET}/nqp ${TARGET}/install; \
