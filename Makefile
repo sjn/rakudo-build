@@ -7,10 +7,13 @@ TARGET  := /opt/rakudo
 RAKUDO  := https://github.com/rakudo/rakudo.git
 #ZEF=git@github.com:ugexe/zef.git
 ZEF     := https://github.com/ugexe/zef.git
+#FEZ=git@github.com:tony-o/raku-fez.git
+FEZ     := https://github.com/tony-o/raku-fez.git
+
 
 PATH    := ${PATH}:${TARGET}/bin:${SRCDIR}/rakudo/install/bin/rakudo
 
-all: clone rakudo zef
+all: clone rakudo zef fez
 
 clone:
 	mkdir -p ${SRCDIR}; \
@@ -20,16 +23,19 @@ clone:
 
 rakudo-fetch:
 	cd ${SRCDIR}/rakudo; \
-	git fetch --prune --tags --recurse-submodules; \
+	git fetch --prune --tags --recurse-submodules origin main; \
 	sleep 3;
 
-rakudo-target:
+rakudo-prepare-target-dir:
 	sudo mkdir -p ${TARGET}; \
 	sudo chown -R ${USER}: ${TARGET};
 
-rakudo: rakudo-fetch rakudo-target
+rakudo: rakudo-fetch rakudo-prepare-target-dir
 	cd ${SRCDIR}/rakudo; \
-	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
+	git switch --force main; \
+	git merge --ff-only --progress --stat origin main \
+	sleep 3; \
+	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=-1 --tags); \
 	make distclean; \
 	rm -rf ./nqp ./install; \
 	rm -rf ${TARGET}/nqp ${TARGET}/install; \
@@ -50,10 +56,16 @@ snap-reinstall: snap-create
 
 zef-fetch:
 	cd ${SRCDIR}/zef; \
-	git fetch --prune --tags --recurse-submodules; \
+	git fetch --prune --tags --recurse-submodules origin main; \
 	sleep 3;
 
 zef: zef-fetch
 	cd ${SRCDIR}/zef; \
+	git switch --force main; \
+	git merge --ff-only --progress --stat origin/main \
+	sleep 3; \
 	git checkout --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
 	${TARGET}/bin/raku -I. bin/zef install --force-install .
+
+fez:
+	zef install fez
