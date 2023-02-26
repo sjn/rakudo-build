@@ -27,15 +27,16 @@ rakudo-fetch:
 	sleep 3;
 
 rakudo-prepare-target-dir:
+	@echo "Creating target directory ${TARGET}. Using sudo(1) to set ownership."; \
 	sudo mkdir -p ${TARGET}; \
 	sudo chown -R ${USER}: ${TARGET};
 
 rakudo: rakudo-fetch rakudo-prepare-target-dir
 	cd ${SRCDIR}/rakudo; \
 	git switch --force main; \
-	git merge --ff-only --progress --stat origin main \
+	git merge --ff-only --progress --stat origin/main main; \
 	sleep 3; \
-	git checkout --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=-1 --tags); \
+	git switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=-1 --tags); \
 	make distclean; \
 	rm -rf ./nqp ./install; \
 	rm -rf ${TARGET}/nqp ${TARGET}/install; \
@@ -62,9 +63,9 @@ zef-fetch:
 zef: zef-fetch
 	cd ${SRCDIR}/zef; \
 	git switch --force main; \
-	git merge --ff-only --progress --stat origin/main \
+	git merge --ff-only --progress --stat origin/main; \
 	sleep 3; \
-	git checkout --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
+	git switch --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
 	${TARGET}/bin/raku -I. bin/zef install --force-install .
 
 fez:
