@@ -39,7 +39,7 @@ rakudo: rakudo-fetch rakudo-prepare-target-dir
 	git switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
 	make distclean; \
 	rm -rf ./nqp ./install; \
-	rm -rfI ${TARGET}/nqp ${TARGET}/install ${TARGET}/share ${TARGET}/include ${TARGET}/lib ${TARGET}/bin; \
+	rm -rf ${TARGET}/nqp ${TARGET}/install ${TARGET}/share ${TARGET}/include ${TARGET}/lib ${TARGET}/bin; \
 	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET}; \
 	make ; \
 	make test; \
@@ -52,6 +52,8 @@ snap-create: snap
 	raku-module-snapshot --directory=${SNAPDIR}/.snap
 
 snap-reinstall: snap-create
+	rm -f ${SNAPDIR}/.snap/latest; \
+	ln -s $(shell ls -1t ${SNAPDIR}/.snap | head -1) ${SNAPDIR}/.snap/latest; \
 	cd ${SNAPDIR}/.snap/latest; \
 	zef install .
 
