@@ -1,15 +1,12 @@
 SRCDIR  := ${HOME}/src
-SNAPDIR := ${SRCDIR}/rakudo-update
-#TARGET  := ${HOME}/rakudo
-TARGET  := /opt/rakudo
+RAKUDIR := ${SRCDIR}/rakudo-build
+SNAPDIR := ${SRCDIR}/rakudo-snap
+TARGET  := ${HOME}/.rakudo
 
-#RAKUDO=git@github.com:rakudo/rakudo.git
 RAKUDO  := https://github.com/rakudo/rakudo.git
-#ZEF=git@github.com:ugexe/zef.git
 ZEF     := https://github.com/ugexe/zef.git
 #FEZ=git@github.com:tony-o/raku-fez.git
 FEZ     := https://github.com/tony-o/raku-fez.git
-
 
 PATH    := ${PATH}:${TARGET}/bin:${SRCDIR}/rakudo/install/bin/rakudo
 
