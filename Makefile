@@ -36,10 +36,10 @@ rakudo: rakudo-fetch rakudo-prepare-target-dir
 	git switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
 	make distclean; \
 	rm -rf ./nqp ./install; \
-	rm -rf ${TARGET}/nqp ${TARGET}/install ${TARGET}/share ${TARGET}/include ${TARGET}/lib ${TARGET}/bin; \
-	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET}; \
-	make ; \
-	make test; \
+#	rm -rf ${TARGET}/nqp ${TARGET}/install ${TARGET}/share ${TARGET}/include ${TARGET}/lib ${TARGET}/bin; \
+	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET} && \
+	make && \
+	make test && \
 	make install
 
 snap:
@@ -62,7 +62,7 @@ zef-fetch:
 zef: zef-fetch
 	cd ${SRCDIR}/zef; \
 	git switch --force main; \
-	git merge --ff-only --progress --stat origin/main; \
+	git merge --ff-only --progress --stat origin/main main; \
 	sleep 3; \
 	rm -rf .precomp; \
 	git switch --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
