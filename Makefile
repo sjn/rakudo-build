@@ -10,17 +10,20 @@ FEZ     := https://github.com/tony-o/raku-fez.git
 
 PATH    := ${PATH}:${TARGET}/bin:${SRCDIR}/rakudo/install/bin/rakudo
 
+GIT     := $(shell which git || echo "MISSING git\(1\)" && false)
+BANNER  := $(shell which figlet || echo "MISSING figlet\(1\)" && false)
+
 all: clone rakudo zef fez
 
 clone:
 	mkdir -p ${SRCDIR}; \
 	cd ${SRCDIR}; \
-	GIT_DIR=${SRCDIR}/zef/.git git rev-parse --git-dir || git clone ${ZEF}; \
-	GIT_DIR=${SRCDIR}/rakudo/.git git rev-parse --git-dir || git clone ${RAKUDO};
+	GIT_DIR=${SRCDIR}/zef/.git ${GIT} rev-parse --git-dir || ${GIT} clone ${ZEF}; \
+	GIT_DIR=${SRCDIR}/rakudo/.git ${GIT} rev-parse --git-dir || ${GIT} clone ${RAKUDO};
 
 rakudo-fetch:
 	cd ${SRCDIR}/rakudo; \
-	git fetch --prune --tags --recurse-submodules origin main; \
+	${GIT} fetch --prune --tags --recurse-submodules origin main; \
 	sleep 3;
 
 rakudo-prepare-target-dir:
@@ -30,10 +33,11 @@ rakudo-prepare-target-dir:
 
 rakudo: rakudo-fetch rakudo-prepare-target-dir
 	cd ${SRCDIR}/rakudo; \
-	git switch --force main; \
-	git merge --ff-only --progress --stat origin/main main; \
+	${GIT} switch --force main; \
+	${GIT} merge --ff-only --progress --stat; \
+	${GIT} switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git ${GIT} describe --abbrev=0 --tags); \
+	${BANNER} $(shell GIT_DIR=${SRCDIR}/rakudo/.git ${GIT} describe --abbrev=0 --tags); \
 	sleep 3; \
-	git switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git git describe --abbrev=0 --tags); \
 	make distclean; \
 	rm -rf ./nqp ./install; \
 	rm -rf ${TARGET}/nqp ${TARGET}/install ${TARGET}/share ${TARGET}/include ${TARGET}/lib ${TARGET}/bin; \
@@ -56,16 +60,16 @@ snap-reinstall: snap-create
 
 zef-fetch:
 	cd ${SRCDIR}/zef; \
-	git fetch --prune --tags --recurse-submodules origin main; \
+	${GIT} fetch --prune --tags --recurse-submodules origin main; \
 	sleep 3;
 
 zef: zef-fetch
 	cd ${SRCDIR}/zef; \
-	git switch --force main; \
-	git merge --ff-only --progress --stat origin/main; \
+	${GIT} switch --force main; \
+	${GIT} merge --ff-only --progress --stat origin/main; \
 	sleep 3; \
 	rm -rf .precomp; \
-	git switch --detach $(shell GIT_DIR=${SRCDIR}/zef/.git git describe --abbrev=0 --tags); \
+	${GIT} switch --detach $(shell GIT_DIR=${SRCDIR}/zef/.git ${GIT} describe --abbrev=0 --tags); \
 	${TARGET}/bin/raku -I. bin/zef install --force-install .
 
 fez:
