@@ -40,10 +40,10 @@ rakudo: rakudo-fetch rakudo-prepare-target-dir
 	sleep 3; \
 	make distclean; \
 	rm -rf ./nqp ./install; \
-	rm -rf ${TARGET}/nqp ${TARGET}/install ${TARGET}/share ${TARGET}/include ${TARGET}/lib ${TARGET}/bin; \
-	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET}; \
-	make ; \
-	make test; \
+#	rm -rf ${TARGET}/nqp ${TARGET}/install ${TARGET}/share ${TARGET}/include ${TARGET}/lib ${TARGET}/bin; \
+	perl Configure.pl --gen-moar --gen-nqp --backends=moar --prefix=${TARGET} && \
+	make && \
+	make test && \
 	make install
 
 snap:
