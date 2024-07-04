@@ -2,6 +2,10 @@
 
 Installs a recent stable rakudo, zef and optionally some modules.
 
+# Dependencies
+
+    git
+    figlet
 
 # Usage
 

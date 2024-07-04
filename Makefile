@@ -10,8 +10,8 @@ FEZ     := https://github.com/tony-o/raku-fez.git
 
 PATH    := ${PATH}:${TARGET}/bin:${SRCDIR}/rakudo/install/bin/rakudo
 
-GIT     := $(shell which git || echo "MISSING git\(1\)" && false)
-BANNER  := $(shell which figlet || echo "MISSING figlet\(1\)" && false)
+GIT     := $(shell which git || echo "MISSING git\(1\)" 1>&2 && exit 1)
+BANNER  := $(shell which figlet || echo "MISSING figlet\(1\)" 1>&2 && exit 1)
 
 all: clone rakudo zef fez
 
