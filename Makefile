@@ -35,8 +35,8 @@ rakudo: rakudo-fetch rakudo-prepare-target-dir
 	cd ${SRCDIR}/rakudo; \
 	${GIT} switch --force main; \
 	${GIT} merge --ff-only --progress --stat; \
-	${GIT} switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git ${GIT} describe --abbrev=0 --tags); \
-	${BANNER} $(shell GIT_DIR=${SRCDIR}/rakudo/.git ${GIT} describe --abbrev=0 --tags); \
+	${GIT} switch --detach $(shell GIT_DIR=${SRCDIR}/rakudo/.git ${GIT} describe --abbrev=0 --tags main); \
+	${BANNER} $(shell GIT_DIR=${SRCDIR}/rakudo/.git ${GIT} describe --abbrev=0 --tags main); \
 	sleep 3; \
 	make distclean; \
 	rm -rf ./nqp ./install; \
@@ -69,7 +69,7 @@ zef: zef-fetch
 	${GIT} merge --ff-only --progress --stat origin/main; \
 	sleep 3; \
 	rm -rf .precomp; \
-	${GIT} switch --detach $(shell GIT_DIR=${SRCDIR}/zef/.git ${GIT} describe --abbrev=0 --tags); \
+	${GIT} switch --detach $(shell GIT_DIR=${SRCDIR}/zef/.git ${GIT} describe --abbrev=0 --tags main); \
 	${TARGET}/bin/raku -I. bin/zef install --force-install .
 
 fez:

@@ -40,7 +40,8 @@
     "Text::CSV",
     "zef",
     "File::Which",
-    "File::Directory::Tree"
+    "File::Directory::Tree",
+    "rakudoc"
   ],
   "tags": [
     
